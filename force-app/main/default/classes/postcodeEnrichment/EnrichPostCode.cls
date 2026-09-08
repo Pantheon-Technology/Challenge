@@ -85,6 +85,7 @@ public with sharing class EnrichPostCode implements Queueable, Database.AllowsCa
 
         if (!leadsToUpdate.isEmpty()) {
             Database.update(leadsToUpdate, dmlOpts, AccessLevel.SYSTEM_MODE);
+            System.enqueueJob(new LeadNotifier());
         }
     }
 }

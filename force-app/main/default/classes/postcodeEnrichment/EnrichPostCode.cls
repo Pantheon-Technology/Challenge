@@ -29,7 +29,9 @@ public with sharing class EnrichPostCode implements Queueable, Database.AllowsCa
         List<Lead> leadsToUpdate = new List<Lead>();
 
         // Configure DML Options to trigger Lead Assignment Rules
-        // We can let this then be handled declartively
+        // We can let this then be handled declartively, I am using some default email templates to send to the lead owner, this can act as the notification
+        // to the lead owner, no need to send a notification as the email should suffice, an arguement could be made for a chatter notification too, but I will still opt for email, it also means
+        // we can change the template for the email without coming here to update a notification
         Database.DMLOptions dmlOpts = new Database.DMLOptions();
         dmlOpts.assignmentRuleHeader.useDefaultRule = true;
 
@@ -68,6 +70,10 @@ public with sharing class EnrichPostCode implements Queueable, Database.AllowsCa
                         leadsToUpdate.add(leadToEnrich);
                     }
                 } else {
+
+                    //I have personally found great benefit when including fields like this
+                    // the main reason is because we can debug the issue much easier, we don't have to check debug logs (if they are even traced for the user)
+                    // AND we get to query for dodgy records that failed our enrichment
                     leadToEnrich.Postcode_Callout_Exception__c = 'Failed to enrich postcode. Status code: ' + response.getStatusCode();
                     leadsToUpdate.add(leadToEnrich);
                 }

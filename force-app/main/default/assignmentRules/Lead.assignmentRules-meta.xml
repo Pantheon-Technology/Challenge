@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssignmentRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <assignmentRule>
+        <fullName>Standard</fullName>
+        <active>true</active>
+        <ruleEntry>
+            <assignedTo>myles.hoult@cunning-koala-qqo743.com</assignedTo>
+            <assignedToType>User</assignedToType>
+            <criteriaItems>
+                <field>Lead.State</field>
+                <operation>equals</operation>
+                <value>Liverpool</value>
+            </criteriaItems>
+        </ruleEntry>
+        <ruleEntry>
+            <assignedTo>myles.hoult@gmail.com.com</assignedTo>
+            <assignedToType>User</assignedToType>
+            <criteriaItems>
+                <field>Lead.State</field>
+                <operation>equals</operation>
+                <value>Manchester</value>
+            </criteriaItems>
+        </ruleEntry>
+    </assignmentRule>
+</AssignmentRules>

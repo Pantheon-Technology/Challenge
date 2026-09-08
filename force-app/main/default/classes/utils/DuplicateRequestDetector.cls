@@ -1,5 +1,4 @@
 public inherited sharing class DuplicateRequestDetector {
-  @readonly
   public Boolean check(String externalReference) {
     Integer duplicateCount = [
       SELECT COUNT()

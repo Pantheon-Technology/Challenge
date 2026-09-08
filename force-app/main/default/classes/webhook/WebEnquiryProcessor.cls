@@ -1,8 +1,8 @@
 //controller layer, takes in request, validates and passes to service layer
 @RestResource(urlMapping='/webenquiryprocessor/*')
-public with sharing class WebEnquiryProcessor {
+global with sharing class WebEnquiryProcessor {
   @HttpPost
-  public static void process() {
+  global static void process() {
     RestRequest req = RestContext.request;
 
     if (req == null || req.requestBody == null) {
@@ -11,16 +11,16 @@ public with sharing class WebEnquiryProcessor {
 
     String jsonPayload = req.requestBody.toString();
 
-    WebEnquiry webEnquiry;
+    WebEnquiry enquiry;
     try {
-      webEnquiry = WebEnquiry.construct(jsonPayload);
+      enquiry = WebEnquiry.construct(jsonPayload);
     } catch (Exception e) {
       throw new WebEnquiryException('Invalid JSON payload.');
     }
 
     try {
       duplicateRequestDetector dupeDetector = new DuplicateRequestDetector();
-      dupeDetector.check(webEnquiry.externalReference);
+      dupeDetector.check(enquiry.externalReference);
     } catch (WebEnquiryException e) {
       RestContext.response.statusCode = 400;
       RestContext.response.responseBody = Blob.valueOf(e.getMessage());
@@ -30,7 +30,7 @@ public with sharing class WebEnquiryProcessor {
     WebApplicationProcessor processor = new WebApplicationProcessor();
 
     try {
-      processor.process(webEnquiry);
+      processor.process(enquiry);
       RestContext.response.statusCode = 200;
     } catch (Exception e) {
       RestContext.response.statusCode = 500;

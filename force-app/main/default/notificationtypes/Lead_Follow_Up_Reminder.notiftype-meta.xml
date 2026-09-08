@@ -1,5 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <CustomNotificationType xmlns="http://soap.sforce.com/2006/04/metadata">
     <customNotifTypeName>Lead_Follow_Up_Reminder</customNotifTypeName>
-    <description>Alerts a Lead owner that a new web enquiry lead needs to be followed up on within its SLA window.</description>
+    <description
+  >Alerts a Lead owner that a new web enquiry lead needs to be followed up on within its SLA window.</description>
+    <desktop>true</desktop>
+    <mobile>true</mobile>
 </CustomNotificationType>

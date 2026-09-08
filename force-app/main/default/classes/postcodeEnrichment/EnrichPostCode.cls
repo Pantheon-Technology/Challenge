@@ -71,8 +71,8 @@ public with sharing class EnrichPostCode implements Queueable, Database.AllowsCa
             }
 
             leadToEnrich.City = (String) resultData.get('admin_district');
-            leadToEnrich.State__c = county; // Populating for Assignment Rule evaluation
-            leadToEnrich.Country__c = (String) resultData.get('country');
+            leadToEnrich.State = county; // Populating for Assignment Rule evaluation
+            leadToEnrich.Country = (String) resultData.get('country');
 
             // Attach assignment rule header to record
             leadToEnrich.setOptions(dmlOpts);
@@ -96,7 +96,9 @@ public with sharing class EnrichPostCode implements Queueable, Database.AllowsCa
 
     if (!leadsToUpdate.isEmpty()) {
       Database.update(leadsToUpdate, dmlOpts, AccessLevel.SYSTEM_MODE);
-      System.enqueueJob(new LeadNotifier());
+      System.enqueueJob(
+        new LeadNotifier(new Map<Id, Lead>(leadsToUpdate).keySet())
+      );
     }
   }
 }

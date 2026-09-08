@@ -13,14 +13,14 @@ private class EnrichPostCodeTest {
 
     // then
     Lead enriched = [
-      SELECT City, State__c, Country__c, Postcode_Callout_Exception__c
+      SELECT City, State, Country, Postcode_Callout_Exception__c
       FROM Lead
       WHERE Id = :lead.Id
     ];
 
     Assert.areEqual('Westminster', enriched.City);
-    Assert.areEqual('Westminster', enriched.State__c); // falls back to admin_district when admin_county is null
-    Assert.areEqual('England', enriched.Country__c);
+    Assert.areEqual('Westminster', enriched.State); // falls back to admin_district when admin_county is null
+    Assert.areEqual('England', enriched.Country);
     Assert.areEqual(null, enriched.Postcode_Callout_Exception__c);
   }
 
@@ -88,14 +88,14 @@ private class EnrichPostCodeTest {
 
     // then
     Lead unchanged = [
-      SELECT City, State__c, Country__c, Postcode_Callout_Exception__c
+      SELECT City, State, Country, Postcode_Callout_Exception__c
       FROM Lead
       WHERE Id = :lead.Id
     ];
 
     Assert.areEqual(null, unchanged.City);
-    Assert.areEqual(null, unchanged.State__c);
-    Assert.areEqual(null, unchanged.Country__c);
+    Assert.areEqual(null, unchanged.State);
+    Assert.areEqual(null, unchanged.Country);
     Assert.areEqual(null, unchanged.Postcode_Callout_Exception__c);
   }
 

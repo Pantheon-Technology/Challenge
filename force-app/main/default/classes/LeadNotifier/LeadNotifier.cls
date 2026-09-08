@@ -61,7 +61,7 @@ public with sharing class LeadNotifier implements Queueable {
 
     if (!tasksToInsert.isEmpty()) {
       try {
-        Database.insert(tasksToInsert, AccessLevel.SYSTEM_MODE, false);
+        Database.insert(tasksToInsert, AccessLevel.SYSTEM_MODE);
       } catch (DmlException e) {
         //I felt that debugs were ok here because we had no other area to store the error, so this'd be a case
         //of checking through the logs

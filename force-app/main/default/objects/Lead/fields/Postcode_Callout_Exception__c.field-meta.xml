@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Postcode_Callout_Exception__c</fullName>
+    <description>Not user facing, helpful field for the dev to debug with if postcode enrichment is failing</description>
+    <inlineHelpText>Not user facing, helpful field for the dev to debug with if postcode enrichment is failing</inlineHelpText>
+    <label>Postcode Callout Exception</label>
+    <length>1000</length>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>LongTextArea</type>
+    <visibleLines>3</visibleLines>
+</CustomField>

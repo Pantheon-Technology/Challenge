@@ -5,12 +5,16 @@ public inherited sharing class WebApplicationProcessor {
     private static final String LEAD_SOURCE_API_VALUE = 'Web';
 
     public void process(WebEnquiry webEnquiry) {
-        createLead(webEnquiry);
+        Lead newLead = createLead(webEnquiry);
+
+        //fire and forget from now on
+        // we can return a 200 as the system was able to create a lead
+        System.enqueueJob(new EnrichPostCode(newLead.Id));
     }
 
     //If time permitted, a better approach would be a repository layer for the lead
     //It'd handle our insert operation here as well as the dupe check query in utils
-    private void createLead(WebEnquiry webEnquiry) {
+    private Lead createLead(WebEnquiry webEnquiry) {
         // webEnquiry has already passed its initial checks, so it's safe to attempt the insert here
         Lead newLead = new Lead(
             FirstName = webEnquiry.firstName,

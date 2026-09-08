@@ -1,4 +1,4 @@
-// takes in the web enquiry, builds a WebEnquiry object out of it then passes it on to the processor
+//controller layer, takes in request, validates and passes to service layer
 @RestResource(urlMapping='/webenquiryprocessor/*')
 public with sharing class WebEnquiryProcessor {
     @HttpPost
@@ -10,10 +10,17 @@ public with sharing class WebEnquiryProcessor {
         }
 
         String jsonPayload = req.requestBody.toString();
-        WebEnquiry webEnquiry = WebEnquiry.construct(jsonPayload);
+
+        WebEnquiry webEnquiry;
+        try {
+            webEnquiry = WebEnquiry.construct(jsonPayload);
+        } catch (Exception e) {
+            throw new WebEnquiryException('Invalid JSON payload.');
+        }
 
         try {
-            validate(webEnquiry);
+            duplicateRequestDetector dupeDetector = new DuplicateRequestDetector();
+            dupeDetector.check(webEnquiry.externalReference);
         } catch (WebEnquiryException e) {
             RestContext.response.statusCode = 400;
             RestContext.response.responseBody = Blob.valueOf(e.getMessage());
@@ -21,12 +28,15 @@ public with sharing class WebEnquiryProcessor {
         }
 
         WebApplicationProcessor processor = new WebApplicationProcessor();
-        processor.process(webEnquiry);
+        
+        try{
+            processor.process(webEnquiry);
+            RestContext.response.statusCode = 200;
+        } catch (Exception e) {
+            RestContext.response.statusCode = 500;
+            RestContext.response.responseBody = Blob.valueOf('Failed to create Lead from web enquiry: ' + e.getMessage());
+            return;
+        }
     }
 
-    private void validate(WebEnquiry webEnquiry){
-        webEnquiry.validate();
-        duplicateRequestDetector dupeDetector = new DuplicateRequestDetector();
-        dupeDetector.check(webEnquiry.externalReference);
-    }
 }

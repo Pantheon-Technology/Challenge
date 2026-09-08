@@ -1,3 +1,4 @@
+// apex object for taking in the generic request
 public with sharing class WebEnquiry {
     public String externalReference;
     public String companyName;
@@ -15,7 +16,9 @@ public with sharing class WebEnquiry {
     }
 
     public static WebEnquiry construct(String jsonPayload) {
-        return (WebEnquiry) JSON.deserialize(jsonPayload, WebEnquiry.class);
+        WebEnquiry webEnquiry = (WebEnquiry) JSON.deserialize(jsonPayload, WebEnquiry.class);
+        webEnquiry.validate();
+        return webEnquiry;
     }
 
     public void validate() {

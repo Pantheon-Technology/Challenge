@@ -22,7 +22,7 @@ public with sharing class LeadNotifier implements Queueable {
         }
 
         List<Lead> leadsToProcess = [
-            SELECT Id, Budget__c, OwnerId
+            SELECT Id, Company, Budget__c, OwnerId
             FROM Lead
             WHERE Id IN :leadIds
         ];
@@ -82,6 +82,7 @@ public with sharing class LeadNotifier implements Queueable {
         }
 
         Id notificationTypeId = notificationTypes[0].Id;
+        Map<Id, Id> ownerIdToManagerId = getManagerIdsForHighValueOwners(leadsToProcess);
 
         for (Lead lead : leadsToProcess) {
             if (lead.OwnerId == null) {
@@ -90,6 +91,12 @@ public with sharing class LeadNotifier implements Queueable {
 
             Integer slaHours = getSlaHours(lead);
 
+            // high value leads also page the owner's line manager
+            Set<String> recipientIds = new Set<String>{ lead.OwnerId };
+            if (ownerIdToManagerId.containsKey(lead.OwnerId)) {
+                recipientIds.add(ownerIdToManagerId.get(lead.OwnerId));
+            }
+
             Messaging.CustomNotification notification = new Messaging.CustomNotification();
             notification.setTitle('New web enquiry lead assigned');
             notification.setBody(lead.Company + ' needs a follow up within ' + slaHours + ' hour(s).');
@@ -97,11 +104,32 @@ public with sharing class LeadNotifier implements Queueable {
             notification.setTargetId(lead.Id);
 
             try {
-                notification.send(new Set<String>{ lead.OwnerId });
+                notification.send(recipientIds);
             } catch (Exception e) {
                 System.debug('Failed to send notification for lead ' + lead.Id + ': ' + e.getMessage());
             }
         }
+    }
+
+    // only high value leads owned by an actual User (not a Queue) have a line manager to notify
+    private Map<Id, Id> getManagerIdsForHighValueOwners(List<Lead> leadsToProcess) {
+        Set<Id> highValueUserOwnerIds = new Set<Id>();
+        for (Lead lead : leadsToProcess) {
+            if (isHighValue(lead) && lead.OwnerId != null && lead.OwnerId.getSObjectType() == User.SObjectType) {
+                highValueUserOwnerIds.add(lead.OwnerId);
+            }
+        }
+
+        Map<Id, Id> ownerIdToManagerId = new Map<Id, Id>();
+        if (highValueUserOwnerIds.isEmpty()) {
+            return ownerIdToManagerId;
+        }
+
+        for (User owner : [SELECT Id, ManagerId FROM User WHERE Id IN :highValueUserOwnerIds AND ManagerId != null]) {
+            ownerIdToManagerId.put(owner.Id, owner.ManagerId);
+        }
+
+        return ownerIdToManagerId;
     }
 
     private Boolean isHighValue(Lead lead) {

@@ -24,7 +24,7 @@ public inherited sharing class WebApplicationProcessor {
       PostalCode = webEnquiry.postcode,
       Title = webEnquiry.enquirySubject,
       Description = webEnquiry.enquiryDescription,
-      LeadSource = LEAD_SOURCE,
+      LeadSource = LEAD_SOURCE_API_VALUE,
       Budget__c = webEnquiry.estimatedBudget,
       External_Reference__c = webEnquiry.externalReference
     );
@@ -32,13 +32,15 @@ public inherited sharing class WebApplicationProcessor {
     try {
       //running in user mode to run in integration user context
       // We do this so we are enforcing good permission management
-      database.insert(newLead, USER_MODE);
+      Database.insert(newLead, AccessLevel.USER_MODE);
     } catch (DmlException e) {
       throw new DmlException(
         'Failed to create Lead from web enquiry: ' + e.getMessage(),
         e
       );
     }
+
+    return newLead;
   }
 
   //future consideration is that we generate an account and contact

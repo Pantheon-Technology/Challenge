@@ -23,5 +23,19 @@
             </criteriaItems>
             <template>unfiled$public/SupportCaseCreatedWebInquiries</template>
         </ruleEntry>
+        <ruleEntry>
+            <assignedTo>myles.hoult@mindful-goat-lg4xao.com</assignedTo>
+            <assignedToType>User</assignedToType>
+            <criteriaItems>
+                <field>Lead.State</field>
+                <operation>notEqual</operation>
+                <value>liverpool</value>
+            </criteriaItems>
+            <criteriaItems>
+                <field>Lead.State</field>
+                <operation>notEqual</operation>
+                <value>manchester</value>
+            </criteriaItems>
+        </ruleEntry>
     </assignmentRule>
 </AssignmentRules>

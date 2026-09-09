@@ -44,7 +44,7 @@ public with sharing class LeadNotifier implements Queueable {
 
       tasksToInsert.add(
         new Task(
-          WhatId = lead.Id,
+          WhoId = lead.Id,
           OwnerId = lead.OwnerId,
           Subject = 'Follow up on web enquiry',
           Description = 'Please follow up on the web enquiry within ' +

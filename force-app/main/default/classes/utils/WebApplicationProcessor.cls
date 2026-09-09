@@ -30,8 +30,7 @@ public inherited sharing class WebApplicationProcessor {
     );
 
     try {
-      //running in user mode to run in integration user context
-      // We do this so we are enforcing good permission management
+      // USER MODE for integration user, enforce that they have the right perms
       Database.insert(newLead, AccessLevel.USER_MODE);
     } catch (DmlException e) {
       throw new DmlException(
@@ -49,12 +48,4 @@ public inherited sharing class WebApplicationProcessor {
   // we wouldnt want to clog up the system, but if we convert a prior lead, we would for sure want
   // to link these back to the account and contact
   // of course the fields dont exist on lead, so it'd have to be made too
-  private static Id getAccountId(string companyName) {
-    return [SELECT Id FROM Account WHERE Name = :companyName LIMIT 1]
-    .Id ?? null;
-  }
-
-  private static Id getContactId(String email) {
-    return [SELECT Id FROM Contact WHERE Email = :email LIMIT 1].Id ?? null;
-  }
 }

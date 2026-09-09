@@ -11,15 +11,17 @@
                 <operation>equals</operation>
                 <value>Liverpool</value>
             </criteriaItems>
+            <template>unfiled$public/SupportCaseCreatedWebInquiries</template>
         </ruleEntry>
         <ruleEntry>
-            <assignedTo>myles.hoult@gmail.com.com.com</assignedTo>
+            <assignedTo>love2shop@shop.com</assignedTo>
             <assignedToType>User</assignedToType>
             <criteriaItems>
                 <field>Lead.State</field>
                 <operation>equals</operation>
                 <value>Manchester</value>
             </criteriaItems>
+            <template>unfiled$public/SupportCaseCreatedWebInquiries</template>
         </ruleEntry>
     </assignmentRule>
 </AssignmentRules>

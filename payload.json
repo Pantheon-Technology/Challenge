@@ -1,0 +1,12 @@
+{
+  "externalReference": "WEB-100045",
+  "companyName": "Acme Rewards Ltd",
+  "firstName": "Jane",
+  "lastName": "Smith",
+  "email": "jane.smith@acmerewards.co.uk",
+  "phone": "07700900123",
+  "postcode": "L23 9UQ",
+  "enquirySubject": "Employee rewards scheme",
+  "enquiryDescription": "Interested in purchasing digital gift cards for an employee recognition programme.",
+  "estimatedBudget": 15000
+}
